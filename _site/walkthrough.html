@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/slate.css">
+
+    
+    <link rel="canonical" href="http://rubyjs.org" />
+    
+
+    <title>RubyJS</title>
+
+  </head>
+
+  <body>
+
+    <div id="sidebar">
+      <h2>RubyJS</h2>
+
+      <ul>
+        <strong>RubyJS Overview</strong>
+        <li><a href="overview.html">For Rubyists</a></li>
+        <li><a href="overview.html">For Javascript devs</a></li>
+        <li><a href="overview.html">Performance/Benchmarks</a></li>
+        <li><a href="overview.html">Browser support</a></li>
+        <li><a href="overview.html">Compared to</a></li>
+      <ul>
+
+      <strong>In detail</strong>
+      <ul>
+        <strong>Basics</strong>
+        <li><a href="walkthrough.html">Getting started</a></li>
+        <li><a href="walkthrough.html#r-function">R() function</a></li>
+        <li><a href="walkthrough.html#class-overview">Class Overview</a></li>
+        <li><a href="walkthrough.html#namingaliasescamelcase">Naming/Aliases</a></li>
+        <li><a href="walkthrough.html#equality-operator">Equality operator</a></li>
+
+        <strong>Methods</strong>
+        <li><a href="walkthrough.html#chainable">Chainable</a></li>
+        <li><a href="walkthrough.html#arguments">Arguments</a></li>
+        <li><a href="walkthrough.html#mutator-methods">Mutator methods</a></li>
+        <li><a href="walkthrough.html">Breaking out of Loops</a></li>
+
+        <strong>Enumerables</strong>
+        <li><a href="walkthrough.html">Enumerables</a></li>
+        <li><a href="walkthrough.html#block-arguments">Block Arguments</a></li>
+        <li><a href="walkthrough.html">Chaining and Enumerators</a></li>
+        <li><a href="walkthrough.html#mixins">Mixins</a></li>
+        <li><a href="walkthrough.html#breaking-loops">Breaking loops</a></li>
+
+        <strong>Implementation Details</strong>
+        <li><a href="walkthrough.html">Wrapper</a></li>
+        <li><a href="walkthrough.html">Anatomy of a method</a></li>
+
+
+      </ul>
+
+
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2 id="r--function">R( ) Function</h2>
+
+<p><code>R(obj, recursive, block)</code> is the equivalent to <code>$</code> in jQuery  or underscorejs’ <code>_()</code>. It is also a shortcut to the RubyJS namespace where all classes are defined, ie R.String, R.Array. <code>R(arg, recursive=false)</code> converts the given argument into a corresponding RubyJS object. The returned object contains all the Ruby methods.</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="nx">R</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>                 <span class="c1">// =&gt; R.Fixnum</span>
+<span class="nx">R</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nx">odd</span><span class="p">()</span>           <span class="c1">// =&gt; true</span>
+
+<span class="nx">str</span> <span class="o">=</span> <span class="nx">R</span><span class="p">(</span><span class="s1">&#39;RubyJS&#39;</span><span class="p">)</span>
+<span class="nx">str</span><span class="p">.</span><span class="nx">swapcase</span><span class="p">()</span>       <span class="c1">// =&gt; &quot;rUBYjs&quot; R.String</span>
+
+<span class="nx">R</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">8</span><span class="p">]).</span><span class="nx">sort</span><span class="p">()</span>   <span class="c1">// =&gt; [1,8,15] R.Array</span>
+<span class="c1">// Inline blocks return native objects:</span>
+<span class="nx">R</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">8</span><span class="p">],</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">sort</span><span class="p">();</span> <span class="p">})</span>
+<span class="c1">// =&gt; [1,8,15] JS Array</span>
+</code></pre>
+</div>
+
+<p>This works for all Javascript types that have a corresponding Ruby class. Numbers, Strings, Regexp, Array. It works with Javascript primitives and their wrapper objects. Types that contain other objects, most notably Array, per default do not typecast their members. Use the recursive flag if you want to do so <code>R([1,2], true)</code> is equivalent to <code>R([R(1), R(2)])</code></p>
+
+<div class="highlight"><pre><code class="javascript"><span class="nx">R</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>                 <span class="c1">// =&gt; RubyJS.Fixnum</span>
+<span class="nx">R</span><span class="p">(</span><span class="mf">1.2</span><span class="p">)</span>               <span class="c1">// =&gt; RubyJS.Float</span>
+<span class="nx">R</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>             <span class="c1">// =&gt; RubyJS.String</span>
+<span class="nx">R</span><span class="p">(</span><span class="sr">/\w+/</span><span class="p">)</span>             <span class="c1">// =&gt; RubyJS.Regexp</span>
+
+<span class="c1">// --- Arrays -------------------------------------------------------</span>
+<span class="nx">R</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>             <span class="c1">// =&gt; RubyJS.Array [1, 2]</span>
+<span class="nx">R</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="kc">true</span><span class="p">)</span>       <span class="c1">// =&gt; RubyJS.Array [R(1), R(2)] Recursive</span>
+
+<span class="c1">// --- With primitive wrappers --------------------------------------</span>
+<span class="nx">R</span><span class="p">(</span><span class="k">new</span> <span class="nb">Number</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>     <span class="c1">// =&gt; RubyJS.Fixnum</span>
+<span class="nx">R</span><span class="p">(</span><span class="k">new</span> <span class="nb">Number</span><span class="p">(</span><span class="mf">1.2</span><span class="p">))</span>   <span class="c1">// =&gt; RubyJS.Float</span>
+<span class="nx">R</span><span class="p">(</span><span class="k">new</span> <span class="nb">Array</span><span class="p">())</span>       <span class="c1">// =&gt; RubyJS.Array</span>
+<span class="nx">R</span><span class="p">(</span><span class="k">new</span> <span class="nb">String</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">))</span> <span class="c1">// =&gt; RubyJS.String</span>
+</code></pre>
+</div>
+
+<p>If a RubyJS class has no equivalent in Javascript such as <em>Range</em> then shortcuts are provided.</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="c1">// --- Ranges -------------------------------------------------------</span>
+<span class="nx">R</span><span class="p">.</span><span class="nx">rng</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>          <span class="c1">// =&gt; RubyJS.Range (1..5)  includes 5</span>
+<span class="nx">R</span><span class="p">.</span><span class="nx">rng</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>    <span class="c1">// =&gt; RubyJS.Range (1...5) excludes 5</span>
+</code></pre>
+</div>
+
+<h4 id="r--inline-functions">R( ) Inline functions</h4>
+
+<p>When you pass a function to <code>R(obj, function() {} )</code> it is executed with the context of <code>obj</code> and (recursively) converts the function return value to a native object. This makes sense when you want to use RubyJS methods but continue working with a native object.</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="nx">R</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">each_cons</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="nx">to_a</span><span class="p">();</span>
+<span class="p">})</span>
+<span class="c1">// =&gt; [[1,2], [2,3]]</span>
+<span class="c1">// Equivalent to:</span>
+<span class="nx">R</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]).</span><span class="nx">each_cons</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="nx">to_a</span><span class="p">().</span><span class="nx">to_native</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>Frankly, inline functions add syntactic beauty with CoffeeScript only.</p>
+
+<div class="highlight"><pre><code class="coffeescript"><span class="c1"># CoffeeScript</span>
+<span class="nx">R</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="o">-&gt;</span> <span class="nx">@sort</span><span class="p">()</span> <span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Todo: this currently only does not work with the type specific typecasting methods <code>R.i( )</code>, <code>R.rng( )</code>, <code>R.w( )</code>, etc.</p>
+
+<h4 id="r--unsupported-types-and-special-cases">R( ) Unsupported Types and Special Cases</h4>
+
+<p>RubyJS objects, null and classes that are not implemented are simply returned.</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="c1">// --- Time and Hash/Object not yet supported -----------------------</span>
+<span class="nx">R</span><span class="p">({})</span>                <span class="c1">// =&gt; {}</span>
+<span class="nx">R</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">())</span>        <span class="c1">// =&gt; native Date</span>
+<span class="nx">R</span><span class="p">(</span><span class="kc">null</span><span class="p">)</span>              <span class="c1">// =&gt; null</span>
+
+<span class="c1">// --- Returns RubyJS untouched -------------------------------------</span>
+<span class="nx">obj</span> <span class="o">=</span> <span class="nx">R</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+<span class="nx">R</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="o">===</span> <span class="nx">obj</span>       <span class="c1">// =&gt; true, obj is not a clone</span>
+<span class="c1">// Below we create two R.String objects.</span>
+<span class="nx">R</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span> <span class="o">===</span> <span class="nx">R</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span> <span class="c1">// =&gt; false</span>
+</code></pre>
+</div>
+
+<p>Special case: When passed a number to <code>R()</code>, it returns a Fixnum if there are no digits after the separator (when <code>1.0 % 1 === 0</code>) and a Float otherwise. Use <code>R.i(1.0)</code> or <code>R.f(1.0)</code> to force it into a specific class.</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="c1">// --- Floats -------------------------------------------------------</span>
+<span class="nx">R</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>               <span class="c1">// =&gt; RubyJS.Fixnum</span>
+<span class="nx">R</span><span class="p">(</span><span class="mf">1.0</span><span class="p">).</span><span class="nx">to_f</span><span class="p">()</span>        <span class="c1">// =&gt; RubyJS.Float</span>
+<span class="nx">R</span><span class="p">.</span><span class="nx">f</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>             <span class="c1">// =&gt; RubyJS.Float</span>
+<span class="nx">R</span><span class="p">.</span><span class="nx">i</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>             <span class="c1">// =&gt; RubyJS.Fixnum</span>
+</code></pre>
+</div>
+
+<p>The <code>R()</code> method is optimized to not cause too much overhead. Of course you can also create RubyJS objects using traditional constructors <code>new R.String('foo')</code>, <code>R.String.new('')</code> or <code>R.$String()</code>.</p>
+
+<h2 id="class-overview">Class Overview</h2>
+
+<p>Following a list of implemented classes from the <a href="http://ruby-doc.org/core-1.9.3/">Ruby 1.9.3 core-lib</a>. They conform closely to <a href="http://rubyspec.org">rubyspec.org</a>. Unsupported features are encodings, bit operations, trusting, tainting and freezing objects. Freezing objects is on the roadmap.</p>
+
+<p>RubyJS Modules</p>
+
+<ul>
+  <li><code>R.Kernel</code> included in Object</li>
+  <li><code>R.Numeric</code> included in all number classes</li>
+  <li><code>R.Integer</code></li>
+  <li><code>R.Enumerable</code> Array, Enumerator, Range. Must implement #each</li>
+  <li><code>R.Comparable</code> Must implement a ‘&lt;=&gt;’ method</li>
+</ul>
+
+<p>RubyJS classes</p>
+
+<ul>
+  <li><code>R.Object</code> methods shared among all classes</li>
+  <li><code>R.Array</code></li>
+  <li><code>R.Enumerator</code> mainly used for chaining enumerable methods</li>
+  <li><code>R.String</code></li>
+  <li><code>R.Regexp</code></li>
+  <li><code>R.MatchData</code></li>
+  <li><code>R.Fixnum</code></li>
+  <li><code>R.Float</code></li>
+  <li><code>R.Range</code></li>
+  <li><code>R.ArgumentError</code>, <code>R.IndexError</code>, <code>R.TypeError</code>, etc. The same error types are raised in RubyJS. At the moment however without the additional error messages.</li>
+</ul>
+
+<p>Missing classes on the roadmap (in order of priority):</p>
+
+<ul>
+  <li><code>R.Hash</code></li>
+  <li><code>R.Time</code></li>
+  <li><code>R.Math</code></li>
+  <li><code>R.Complex</code>, <code>R.Bignum</code>, <code>R.Rational</code></li>
+  <li><code>IO</code>, <code>File</code> and others that make no sense in the browser.</li>
+</ul>
+
+<h4 id="the-r-namespace">The R Namespace</h4>
+
+<p><code>R</code> or <code>RubyJS</code> is the namespace where all classes reside. Like Rubys main object it includes the Kernel module. So you have access to various methods that are also available in all objects, e.g. <code>R.rand(10)</code>, <code>R.puts('hello')</code>. Also the R namespace includes the special variables <code>R['$~']</code>, <code>R['$;']</code>, etc that are fully functional. They are likely to get less awkard aliases.</p>
+
+<h4 id="namingaliasescamelcase">Naming/Aliases/CamelCase</h4>
+
+<p>Ruby method names that are not valid javascript names are added as strings and conssitently aliased with valid names. For those with strong feelings against snake_case method names there will be camelCased aliases.</p>
+
+<ul>
+  <li>Operator methods as strings with an alias</li>
+  <li>Remove <code>?</code> from method names. <code>include?</code> =&gt; <code>include</code></li>
+  <li>Replace <code>!</code> with <code>_bang</code></li>
+</ul>
+
+<div class="highlight"><pre><code class="javascript"><span class="nx">str</span> <span class="o">=</span> <span class="nx">R</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+
+<span class="nx">str</span><span class="p">[</span><span class="s1">&#39;&lt;=&gt;&#39;</span><span class="p">](</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span> <span class="c1">// =&gt; -1</span>
+<span class="nx">str</span><span class="p">.</span><span class="nx">cmp</span><span class="p">(</span><span class="nx">bar</span><span class="p">)</span>      <span class="c1">// cmp alias to &lt;=&gt;</span>
+
+<span class="nx">str</span><span class="p">[</span><span class="s1">&#39;==&#39;</span><span class="p">](</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>  <span class="c1">// =&gt; false</span>
+<span class="nx">str</span><span class="p">.</span><span class="nx">equals</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span> <span class="c1">// equals alias to ==</span>
+
+<span class="c1">// Mapping:</span>
+<span class="s1">&#39;==&#39;</span>  <span class="o">:</span> <span class="nx">equals</span>
+<span class="s1">&#39;===&#39;</span> <span class="o">:</span> <span class="nx">equal_case</span>
+<span class="s1">&#39;&lt;=&gt;&#39;</span> <span class="o">:</span> <span class="nx">cmp</span>
+<span class="s1">&#39;%&#39;</span>   <span class="o">:</span> <span class="nx">modulo</span>
+<span class="s1">&#39;+&#39;</span>   <span class="o">:</span> <span class="nx">plus</span>
+<span class="s1">&#39;-&#39;</span>   <span class="o">:</span> <span class="nx">minus</span>
+<span class="s1">&#39;*&#39;</span>   <span class="o">:</span> <span class="nx">multiply</span>
+<span class="s1">&#39;**&#39;</span>  <span class="o">:</span> <span class="nx">exp</span>
+<span class="s1">&#39;/&#39;</span>   <span class="o">:</span> <span class="nx">divide</span>
+<span class="s1">&#39;&lt;&lt;&#39;</span>  <span class="o">:</span> <span class="nx">append</span>
+</code></pre>
+</div>
+
+<p>Special variables and methods in the R namespace like <code>$~</code> will reside in <code>R['$~']</code>. Typecasting methods Kernel#String, Kernel#Float unfortunately collide with the class names and for the time being are prefixed with a <code>$</code>: <code>R.$Float("1.23")</code>, <code>R.$String([])</code>.</p>
+
+<h4 id="constructors">Constructors</h4>
+
+<p>The RubyJS objects work much like the primitive wrapper objects in JavaScript. They coerce back to their primitive values using <code>valueOf</code>, <code>toString</code>.</p>
+
+<div class="highlight"><pre><code class="javascript">    <span class="nx">R</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+
+    <span class="c1">// To get the same functionality as Rubys String.new, use:</span>
+    <span class="nx">R</span><span class="p">.</span><span class="nb">String</span><span class="p">.</span><span class="k">new</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span> <span class="c1">// =&gt; &#39;foo&#39;</span>
+
+    <span class="c1">// Call the constructor directly for speed</span>
+    <span class="k">new</span> <span class="nx">R</span><span class="p">.</span><span class="nb">String</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span> <span class="c1">// =&gt; &#39;foo&#39;</span>
+
+    <span class="c1">// If not passed a string primitive, valueOf() will be called</span>
+    <span class="k">new</span> <span class="nx">R</span><span class="p">.</span><span class="nb">String</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>     <span class="c1">// =&gt; &#39;1&#39;</span>
+    <span class="k">new</span> <span class="nx">R</span><span class="p">.</span><span class="nb">String</span><span class="p">(</span> <span class="p">)</span>     <span class="c1">// =&gt; &#39;&#39;</span>
+    <span class="k">new</span> <span class="nx">R</span><span class="p">.</span><span class="nb">String</span><span class="p">(</span><span class="kc">null</span><span class="p">)</span>  <span class="c1">// =&gt; &#39;&#39;</span>
+</code></pre>
+</div>
+
+<h4 id="tonative">to_native()</h4>
+
+<p>To access the underlying native JS primitive or object use <code>to_native()</code> and <code>to_native(true)</code> also converts an objects member (e.g. array elements). If there is no native JS object it will return self/this.</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="nx">R</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">).</span><span class="nx">size</span><span class="p">().</span><span class="nx">to_native</span><span class="p">()</span>                 <span class="c1">// =&gt; 3  JS primitive</span>
+</code></pre>
+</div>
+
+<h4 id="equality-operator">Equality operator</h4>
+
+<p>The ruby equality operators <code>==</code>, <code>===</code>, <code>&lt;=&gt;</code> are implemented to follow rubyspec. When comparing a rubyjs object with native js types keep the following in mind.</p>
+
+<div class="highlight"><pre><code class="javascript">    <span class="nx">str</span> <span class="o">=</span> <span class="nx">R</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+
+    <span class="c1">// RubyJS.String objects coerce to primitives</span>
+    <span class="nx">str</span>   <span class="o">==</span> <span class="s1">&#39;foo&#39;</span>                            <span class="c1">//=&gt; true</span>
+    <span class="s1">&#39;foo&#39;</span> <span class="o">==</span> <span class="nx">str</span>                              <span class="c1">//=&gt; true</span>
+
+    <span class="c1">// RubyJS.Objects behave like the native wrapper objects</span>
+    <span class="s1">&#39;foo&#39;</span> <span class="o">===</span> <span class="nx">str</span>                             <span class="c1">//=&gt; false</span>
+    <span class="s1">&#39;foo&#39;</span> <span class="o">===</span> <span class="k">new</span> <span class="nb">String</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>               <span class="c1">//=&gt; false</span>
+
+    <span class="c1">// Also R() creates different objects for the same String</span>
+    <span class="nx">R</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span> <span class="o">===</span> <span class="nx">R</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>                     <span class="c1">//=&gt; false</span>
+    <span class="k">new</span> <span class="nb">String</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span> <span class="o">===</span> <span class="k">new</span> <span class="nb">String</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>   <span class="c1">//=&gt; false</span>
+</code></pre>
+</div>
+
+<h2 id="methods">Methods</h2>
+
+<h4 id="chainable">Chainable</h4>
+
+<p>Methods are chainable by design as they return RubyJS objects. So no further typecasting with R() is needed and we can write powerful one-liners.</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="nx">str</span> <span class="o">=</span> <span class="nx">R</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>                       <span class="c1">// =&gt; &#39;foo&#39;    &lt;RubyJS.String&gt;</span>
+<span class="nx">str</span><span class="p">.</span><span class="nx">size</span><span class="p">()</span>                           <span class="c1">// =&gt; 3        &lt;RubyJS.Fixnum&gt;</span>
+<span class="nx">str</span><span class="p">.</span><span class="nx">size</span><span class="p">().</span><span class="nx">upto</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>                   <span class="c1">// =&gt; &lt;Enum&gt;   &lt;RubyJS.Enumerator&gt;</span>
+<span class="nx">str</span><span class="p">.</span><span class="nx">size</span><span class="p">().</span><span class="nx">upto</span><span class="p">(</span><span class="mi">5</span><span class="p">).</span><span class="nx">to_a</span><span class="p">()</span>            <span class="c1">// =&gt; [3,4,5]  &lt;RubyJS.Array&gt;</span>
+<span class="nx">str</span><span class="p">.</span><span class="nx">size</span><span class="p">().</span><span class="nx">upto</span><span class="p">(</span><span class="mi">5</span><span class="p">).</span><span class="nx">to_a</span><span class="p">().</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>  <span class="c1">// =&gt; &quot;3,4,5&quot;  &lt;RubyJS.String&gt;</span>
+</code></pre>
+</div>
+
+<p>Note that block arguments in Enumerable methods typically are never converted, both for performance reasons and to be able to support the various useages of block arguments.</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="nx">R</span><span class="p">([</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">]).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">w</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// =&gt; &#39;foo&#39;, &#39;bar&#39; both remain primitives</span>
+
+<span class="nx">R</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]).</span><span class="nx">each_slice</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">arr</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// =&gt; [1,2] and [3,4] arr both native arrays</span>
+</code></pre>
+</div>
+
+<h4 id="arguments">Arguments</h4>
+
+<p>All RubyJS methods typecast method arguments. So it doesnt matter whether you pass a RubyJS object, a primitive or a native JS object. Typecasting follows closely the Ruby specification and supports duck-typing.</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="nx">str</span> <span class="o">=</span> <span class="nx">R</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+<span class="nx">str</span><span class="p">.</span><span class="nx">rjust</span><span class="p">(</span>   <span class="mi">5</span>  <span class="p">)</span>         <span class="c1">// =&gt; &quot;  foo&quot;  (Recommended)</span>
+
+<span class="nx">str</span><span class="p">.</span><span class="nx">rjust</span><span class="p">(</span> <span class="nx">R</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="p">)</span>         <span class="c1">// =&gt; &quot;  foo&quot;</span>
+<span class="nx">str</span><span class="p">.</span><span class="nx">rjust</span><span class="p">(</span><span class="k">new</span> <span class="nb">Number</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>  <span class="c1">// =&gt; &quot;  foo&quot;</span>
+
+<span class="c1">// Duck-typing, object that implements to_int</span>
+<span class="nx">str</span><span class="p">.</span><span class="nx">rjust</span><span class="p">(</span> <span class="p">{</span>
+  <span class="nx">to_int</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">R</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span> <span class="p">}</span>
+<span class="p">})</span>
+</code></pre>
+</div>
+
+<p>This process is fast. Methods internally use JS primitives and arguments will only be typecasted to a RubyJS object when needed.</p>
+
+<h4 id="mutator-methods">Mutator methods</h4>
+
+<p>Destructive methods change the object. Non-destructive methods do not change the object itself but return a new one. They are called mutator methods as they mutate the object. In Javascript there are only a handful of mutator methods for arrays.</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>       <span class="c1">// a normal javascript array</span>
+<span class="nx">arr</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>       <span class="c1">// =&gt; [1,2,3,4]</span>
+<span class="nx">arr</span>                 <span class="c1">// =&gt; [1,2,3] unchanged -&gt; non-destructive method</span>
+<span class="nx">arr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>         <span class="c1">// =&gt; 4</span>
+<span class="nx">arr</span>                 <span class="c1">// =&gt; [1,2,3,4] changed -&gt; destructive method</span>
+</code></pre>
+</div>
+
+<p>In Ruby destructive methods have a <code>!</code> suffix, <code>capitalize</code> vs <code>capitalize!</code>. As this is not a valid method name it is replaced with <code>capitalize_bang</code> until a better solution is found.</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="nx">str</span> <span class="o">=</span> <span class="nx">R</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+<span class="nx">str</span><span class="p">.</span><span class="nx">capitalize</span><span class="p">()</span>       <span class="c1">// =&gt; &#39;Foo&#39;</span>
+<span class="nx">str</span>                    <span class="c1">// =&gt; &#39;foo&#39;</span>
+<span class="nx">str</span><span class="p">.</span><span class="nx">capitalize_bang</span><span class="p">()</span>
+<span class="nx">str</span>                    <span class="c1">// =&gt; &#39;Foo&#39;</span>
+</code></pre>
+</div>
+
+<h2 id="enumerables">Enumerables</h2>
+
+<p>Complete support for Ruby Enumerables and Enumerators.</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="nx">arr</span> <span class="o">=</span> <span class="nx">R</span><span class="p">.</span><span class="nx">w</span><span class="p">(</span><span class="s1">&#39;foo bar baz&#39;</span><span class="p">)</span>  <span class="c1">// =&gt; [&#39;foo&#39;, &#39;bar&#39;, &#39;baz&#39;]</span>
+
+<span class="nx">arr</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">w</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">w</span><span class="p">.</span><span class="nx">size</span><span class="p">()</span> <span class="p">}</span>   <span class="c1">// =&gt; [3,3,3]</span>
+
+<span class="nx">arr</span><span class="p">.</span><span class="nx">each_with_object</span><span class="p">({},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">obj</span><span class="p">[</span><span class="nx">w</span><span class="p">]</span> <span class="o">=</span> <span class="nx">w</span><span class="p">.</span><span class="nx">reverse</span><span class="p">();</span>
+<span class="p">})</span>
+<span class="c1">// =&gt; { foo: &quot;oof&quot;, bar: &quot;rab&quot;, baz: &quot;zab&quot; }</span>
+</code></pre>
+</div>
+
+<h4 id="block-arguments">Block arguments</h4>
+
+<p>When passing arguments to a block RubyJS adapts to the arity of the block (Function.length) and works exactly like ruby.</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="nx">arr</span> <span class="o">=</span> <span class="nx">R</span><span class="p">([</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="p">])</span>
+<span class="nx">arr</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">a</span>    <span class="p">)</span> <span class="p">{</span> <span class="p">})</span>          <span class="c1">// a: [1,2,3]</span>
+<span class="nx">arr</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">,</span><span class="nx">c</span><span class="p">)</span> <span class="p">{</span> <span class="p">})</span>          <span class="c1">// a: 1, b: 2, c: 3</span>
+<span class="nx">arr</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span>     <span class="p">)</span> <span class="p">{</span> <span class="p">})</span>          <span class="c1">// arguments: [1,2,3]</span>
+
+<span class="nx">arr</span> <span class="o">=</span> <span class="nx">R</span><span class="p">([</span><span class="s1">&#39;foo&#39;</span><span class="p">])</span>
+<span class="nx">arr</span><span class="p">.</span><span class="nx">each_with_index</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{})</span> <span class="c1">// a: &#39;foo&#39;, i: 0</span>
+<span class="nx">arr</span><span class="p">.</span><span class="nx">each_with_index</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">a</span>   <span class="p">)</span> <span class="p">{})</span> <span class="c1">// a: &#39;foo&#39;</span>
+</code></pre>
+</div>
+
+<p>Splatting arguments with CoffeeScript works too:</p>
+
+<div class="highlight"><pre><code class="coffeescript"><span class="nx">coffee</span><span class="p">.</span><span class="nx">each_with_index</span> <span class="nf">(a...) -&gt;</span> <span class="c1"># a: [&#39;foo&#39;, 0]</span>
+</code></pre>
+</div>
+
+<div class="highlight"><pre><code class="javascript"><span class="nx">js_arr</span><span class="p">.</span><span class="nx">each_with_index</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">([])</span>
+<span class="p">})</span> <span class="c1">// args: [&#39;foo&#39;, 0]</span>
+</code></pre>
+</div>
+
+<h4 id="mixins">Mixins</h4>
+
+<p>Enumerable is implemented as a module that can be included in others. So you can create your own Collection, e.g. a Set, OrderedArray, etc. Implement <code>#each</code>.</p>
+
+<h4 id="breaking-loops">Breaking loops</h4>
+
+<div class="highlight"><pre><code class="javascript"><span class="nx">arr</span> <span class="o">=</span> <span class="nx">R</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+
+<span class="nx">result</span> <span class="o">=</span> <span class="nx">R</span><span class="p">.</span><span class="nx">catch_break</span><span class="p">(</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">breaker</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">arr</span><span class="p">.</span><span class="nx">each</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">breaker</span><span class="p">.</span><span class="k">break</span><span class="p">(</span><span class="s2">&quot;yay&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="nx">el</span> <span class="o">==</span> <span class="mi">2</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+
+<span class="nx">result</span> <span class="c1">// =&gt; &#39;yay&#39;</span>
+</code></pre>
+</div>
+
+<p>By <a href="http://hasclass.com">hasclass</a></p>
+
+
+      </section>
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+
+
+  </body>
+  <script>
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-33740484-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</html>

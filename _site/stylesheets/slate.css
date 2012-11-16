@@ -368,6 +368,30 @@ Full-Width Styles
   background: #212121;
 }
 
+div#sidebar {
+  background: #fff;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 0px 0 30px 15px;
+  border-right: 1px solid #bbb;
+  box-shadow: 0 0 20px #ccc; -webkit-box-shadow: 0 0 20px #ccc; -moz-box-shadow: 0 0 20px #ccc;
+}
+div#sidebar h2 {
+  border: none !important;
+  font-size: 24px;
+}
+div#sidebar ul {
+  font-size: 11pt;
+}
+div#sidebar ul li {
+  list-style-type: none;
+  padding-left: 0;
+}
+
 /*******************************************************************************
 Small Device Styles
 *******************************************************************************/

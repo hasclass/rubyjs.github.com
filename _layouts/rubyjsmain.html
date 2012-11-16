@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/slate.css">
+
+    {% if page.canonical %}
+    <link rel="canonical" href="{{page.canonical}}" />
+    {% endif %}
+
+    <title>RubyJS</title>
+
+  </head>
+
+  <body>
+
+    <div id="sidebar">
+      <h2>RubyJS</h2>
+
+      <ul>
+        <strong>RubyJS Overview</strong>
+        <li><a href="overview.html">For Rubyists</a></li>
+        <li><a href="overview.html">For Javascript devs</a></li>
+        <li><a href="overview.html">Performance/Benchmarks</a></li>
+        <li><a href="overview.html">Browser support</a></li>
+        <li><a href="overview.html">Compared to</a></li>
+      <ul>
+
+      <strong>In detail</strong>
+      <ul>
+        <strong>Basics</strong>
+        <li><a href="walkthrough.html">Getting started</a></li>
+        <li><a href="walkthrough.html#r-function">R() function</a></li>
+        <li><a href="walkthrough.html#class-overview">Class Overview</a></li>
+        <li><a href="walkthrough.html#namingaliasescamelcase">Naming/Aliases</a></li>
+        <li><a href="walkthrough.html#equality-operator">Equality operator</a></li>
+
+        <strong>Methods</strong>
+        <li><a href="walkthrough.html#chainable">Chainable</a></li>
+        <li><a href="walkthrough.html#arguments">Arguments</a></li>
+        <li><a href="walkthrough.html#mutator-methods">Mutator methods</a></li>
+        <li><a href="walkthrough.html">Breaking out of Loops</a></li>
+
+        <strong>Enumerables</strong>
+        <li><a href="walkthrough.html">Enumerables</a></li>
+        <li><a href="walkthrough.html#block-arguments">Block Arguments</a></li>
+        <li><a href="walkthrough.html">Chaining and Enumerators</a></li>
+        <li><a href="walkthrough.html#mixins">Mixins</a></li>
+        <li><a href="walkthrough.html#breaking-loops">Breaking loops</a></li>
+
+        <strong>Implementation Details</strong>
+        <li><a href="walkthrough.html">Wrapper</a></li>
+        <li><a href="walkthrough.html">Anatomy of a method</a></li>
+
+
+      </ul>
+
+
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        {{content}}
+      </section>
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+
+
+  </body>
+  <script>
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-33740484-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</html>
