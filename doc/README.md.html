@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>CoffeeScript API Documentation</title>
+  <link rel='stylesheet' href='assets/codo.css' type='text/css'>
+  <script src='assets/codo.js'></script>
+  <script src='assets/search_data.js'></script>
+</head>
+  <body>
+    <div id='base' data-path=''></div>
+<div id='header'>
+  <div id='menu'>
+    <a href='class_index.html' title='Index'>Index</a>
+    &raquo;
+    <span class='title'>README.md</span>
+    <nav>
+      <ul>
+        <li class='noframes'>
+          (<a class='noframes' href='#'>no frames</a>)
+        </li>
+      </ul>
+    </nav>
+    <div id='search'>
+      <a id='class_list_link' href='class_list.html'>Classes</a>
+      <a id='mixin_list_link' href='mixin_list.html'>Mixins</a>
+      <a id='method_list_link' href='method_list.html'>Methods</a>
+      <a id='file_list_link' href='file_list.html'>Files</a>
+    </div>
+  </div>
+  <iframe id='search_frame'></iframe>
+  <div id='fuzzySearch'>
+    <input type='text'>
+    <ol></ol>
+  </div>
+  <div id='help'>
+    <p>
+      Quickly fuzzy find classes, mixins, methods, file:
+    </p>
+    <ul>
+      <li>
+        <span>Ctrl-T</span>
+        Open fuzzy finder dialog
+      </li>
+    </ul>
+    <p>
+      In frame mode you can toggle the list naviation frame on the left side:
+    </p>
+    <ul>
+      <li>
+        <span>Ctrl-L</span>
+        Toggle list view
+      </li>
+    </ul>
+    <p>
+      You can focus a list in frame mode or toggle a tab in frameless mode:
+    </p>
+    <ul>
+      <li>
+        <span>Ctrl-C</span>
+        Class list
+      </li>
+      <li>
+        <span>Ctrl-I</span>
+        Mixin list
+      </li>
+      <li>
+        <span>Ctrl-M</span>
+        Method list
+      </li>
+      <li>
+        <span>Ctrl-F</span>
+        File list
+      </li>
+    </ul>
+    <p>
+      You can focus and blur the search input:
+    </p>
+    <ul>
+      <li>
+        <span>Ctrl-S</span>
+        Focus search input
+      </li>
+      <li>
+        <span>Esc</span>
+        Blur search input
+      </li>
+    </ul>
+    <p>
+      In frameless mode you can close the list tab:
+    </p>
+    <ul>
+      <li>
+        <span>Esc</span>
+        Close list tab
+      </li>
+    </ul>
+  </div>
+</div>
+    <div id='content'>
+      <nav class='toc'>
+        <p class='title'>
+          <a class='hide_toc' href='#'>
+            <strong>Table of Contents</strong>
+          </a>
+          <small>
+            (<a class='float_toc' href='#'>left</a>)
+          </small>
+        </p>
+      </nav>
+      <div id='filecontents'>
+        <h4>State of this project:</h4>
+<p>This project is pre-alpha (whatever that means). Implemented are roughly 80% of the methods from Array, Enumerable, String, Range, Numeric, Float, Integer. Check the current progress in progress.txt. Most big issues have been solved and I am finishing the remaining methods, trying to find the right tradeoffs and smart ways to package things together.
+
+</p>
+<h2>RubyJS</h2>
+<p>A port of the Ruby 1.9.3 corelib to coffeescript/javascript/node that conforms to rubyspec.org and does not pollute the global javascript namespace. It is not an attempt to port or mimic the ruby object model and metaprogramming capabilities, whatsoever.
+
+</p>
+<p>Why? Coffeescript made it easy to switch from ruby/python. Unfortunately I quickly missed the functionality of the ruby corelib (the very core part of it, String, Array, Numeric, etc.).
+
+</p>
+<p>In numbers (as of 2012-07-25): 230 methods, 900 specs, gzipped ~10kb, minified ~40kb.
+
+</p>
+<h3>Features</h3>
+<ul>
+<li>Methods comply 1 to 1 to ruby code (tested by ~1000 rubyspec tests), down to raising the same Error types.</li>
+<li>All methods of the core ruby classes, excluding ruby specifics and bit operators.</li>
+<li>Enumerators, Iterators, Enumerable. Chainable and extendible.</li>
+<li>Consistent breaking out of loops using: catch_break (breaker) -&gt; breaker.break().</li>
+<li>Methods automatically box/coerce native JS primitives into the right RubyJS type.</li>
+<li>Small filesize: 10-20kb minified and gzipped.</li>
+</ul>
+<h3>RubyJS Code samples</h3>
+<pre><code class="lang-coffeescript"># ** All return values are instances of rubyjs classes. **
+
+## Numbers -----------------------------------------------------
+
+R(1.0123).round(2)               # =&gt; 1.01
+
+## String ------------------------------------------------------
+R(&quot;-&quot;).multiply(10)              # =&gt; &quot;--------------&quot;
+
+str = R(&quot;hello world&quot;)
+str.capitalize().ljust(20, &#39;-&#39;)   # =&gt; &quot;Hello world--------&quot;
+
+words = str.scan(/\w+/)           # =&gt; [&#39;hello&#39;, &#39;world&#39;]
+R(&quot;a&quot;).upto(&quot;f&quot;).to_a()          # =&gt; [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;]
+
+## Iterators, Enumerators --------------------------------------
+words.map (w) -&gt; w.capitalize()   # =&gt; [&#39;Hello&#39;, &#39;World&#39;]
+
+## StringToProc mimics SymbolToProc
+words.map(&quot;succ_bang&quot;)            # =&gt; [&#39;Hellp&#39;, &#39;Worle&#39;]
+
+## use coffeescript iterators:
+w.capitalize() for w in words.iterator()
+
+## chaining enumerators:
+R([123]).each_with_object(&#39;foo&#39;).each_with_index (a_b, idx) -&gt;
+# =&gt; a_b : [123, &#39;foo&#39;], idx =&gt; 0
+
+R(5).upto(10) (i) -&gt; # ...
+R(5).upto(10).to_a()             # =&gt; [5,6,7,8,9]
+R(5).upto(10).inject(&quot;+&quot;)        # =&gt; 35
+
+## bang methods
+str.capitalize_bang()
+str                               # =&gt; &#39;Hello world&#39;
+
+## Chainable: rubyjs methods return rubyjs objects
+R(&quot;hello&quot;).size()                # =&gt; 5</code></pre>
+<h2>Why porting the Ruby core lib</h2>
+<p>There is no standard core library for JS/Coffee. jQuery and underscorejs do not offer the functionality I needed.
+
+</p>
+<ul>
+<li>The Ruby corelib is fantastic and battle proven.</li>
+<li>Not reinventing the wheel, ruby developers are immediately productive</li>
+<li>Rubyspec has a complete (rspec) testsuite that can be ported to coffeescript easily (a matter of Find/Replace)</li>
+<li>Rubinius gives us an implementation of all corelib classes/methods. Not sure how to implement String#scan, check the rubinius source.</li>
+<li>With the corelib, porting additional rubygems to Coffeescript becomes doable</li>
+<li>Porting from rubinius to rubyjs is fun. completely speced and testdriven. Also it&#39;s a great way to learn both languages.</li>
+</ul>
+<h2>Getting Started</h2>
+<ul>
+<li>Clone repository</li>
+<li>Run the coffee console loading the rubyjs files:</li>
+</ul>
+<pre><code>/path/to/rubyjs $ coffee -r ./lib/ruby.coffee
+coffee&gt; R(&#39;hello world&#39;).capitalize()
+&quot;Hello World&quot;
+coffee&gt; R(&#39;hello world&#39;).capitalize().unbox()
+&#39;Hello world&#39;</code></pre>
+<ul>
+<li>Setup development environment:</li>
+</ul>
+<pre><code>$ bundle install
+$ cake setup_tests            # compiles all test files
+$ bundle exec guard           # automatically compile coffeescript
+$ rake jasmine                # starts jasmine server
+$ open http://localhost:8888  # pray</code></pre>
+<p>If you get an error like Error: spawn EMFILE and you&#39;re on a mac, check this thread:
+<a href="https://groups.google.com/forum/?fromgroups#!topic/nodejs/jeec5pAqhps">https://groups.google.com/forum/?fromgroups#!topic/nodejs/jeec5pAqhps</a>
+
+
+
+</p>
+<h2>Assorted details</h2>
+<h4>Ruby method equivalents</h4>
+<pre><code># slightly outdated, needs to be updated.
+Object#foo?     = Object#foo
+Object#foo!     = Object#foo_bang
+
+Object[&#39;&lt;&lt;&#39;]    = Object#push
+Object[&#39;&lt;=&gt;&#39;]   = Object#cmp
+Object[&#39;==&#39;]    = Object#equal
+Object[&#39;===&#39;]   = Object#equal_case
+Object[&#39;&lt;&#39;]     = Object#lt
+Object[&#39;&lt;=&#39;]    = Object#lteq
+Object[&#39;&gt;&#39;]     = Object#gt
+Object[&#39;&gt;=&#39;]    = Object#gteq
+Object[&#39;**&#39;]    = ?
+Object[&#39;*&#39;]     = Object#multiply
+Object[&#39;/&#39;]     = Object#divide
+Object[&#39;%&#39;]     = Object#modulo
+Object[&#39;+&#39;]     = Object#plus
+Object[&#39;-&#39;]     = Object#minus</code></pre>
+<h4>No monkey patching js core classes. Dont interfere with the global namespace</h4>
+<p>All JSRuby classes sit in an own namespace. Temporarly it is: <strong>R</strong>
+
+</p>
+<pre><code class="lang-coffeescript">str = &quot;hello&quot;
+str.capitalize()
+# =&gt; Throws NoMethodError
+
+str = new rubyjs.String(&quot;hello&quot;);
+str.capitalize()
+# =&gt; &lt;rubyjs.String &quot;Hello&quot;&gt;</code></pre>
+<h4>Boxing/Unboxing</h4>
+<p>For classes that have js core classes or primitives, e.g. String, Date, Array, convert from core to JSRuby classes and back using boxing and unboxing. Boxing a primitive to their JSRuby counterpart is done using <strong>R( value )</strong>. Unboxing a JSRuby object to their primitive counterpart by calling obj.<strong>unbox()</strong> and recursivively <strong>unbox(true)</strong>.
+
+</p>
+<p>Boxing primitive values using R():
+
+</p>
+<pre><code class="lang-coffeescript">js_string = &quot;hello&quot;
+# =&gt; &quot;hello&quot;
+
+R(&quot;hello&quot;)
+# =&gt; &lt;rubyjs.String &quot;hello&quot;&gt;</code></pre>
+<p>To get the JS core primitives back we can unbox() them:
+
+</p>
+<pre><code class="lang-coffeescript">R(&quot;hello&quot;).unbox()
+# =&gt; &quot;hello&quot;
+
+R(&quot;hello&quot;).capitalize().unbox()
+# =&gt; &quot;hello&quot;</code></pre>
+<p>Unboxing can be made recursive by calling unbox(true). Useful for arrays:
+
+
+</p>
+<pre><code class="lang-coffeescript">R(&quot;hello world&quot;).scan(/\w+/).unbox()
+# =&gt; [ &lt;rubyjs.String &quot;hello&quot;&gt;, &lt;rubyjs.String &quot;hello&quot;&gt; ]
+
+R(&quot;hello world&quot;).scan(/\w+/).unbox(true)
+# =&gt; [ &#39;hello&#39;, &#39;hello&#39; ]</code></pre>
+<h4>Chainable: JSRuby return values are JSRuby objects.</h4>
+<p>When using JSRuby methods, the return values will become JSRuby objects. This allows for chaining methods.
+
+</p>
+<pre><code class="lang-coffeescript">R(&quot;hello&quot;).capitalize()
+# =&gt; &lt;rubyjs.String &quot;hello&quot;&gt;
+
+R(&quot;hello&quot;).capitalize().ljust(10, &#39;-&#39;)
+# =&gt; &lt;rubyjs.String &quot;Hello------&quot;&gt;
+
+R(&quot;hello world&quot;).scan(/\w+/)
+# =&gt; &lt;rubyjs.Array [ &lt;rubyjs.String &quot;hello&quot;&gt;, &lt;rubyjs.String &quot;hello&quot;&gt; ]&gt;</code></pre>
+<h4>Porting to rubyspec.org</h4>
+<p>Porting the rubyspecs is easy. Clone the rubinius repository, copy a spec file:
+
+</p>
+<pre><code class="lang-ruby"># /path/to/rubinius/spec/ruby/core/string/ljust_spec.rb
+
+describe &quot;String#ljust with length, padding&quot; do
+  it &quot;returns a new string of specified length with self left justified and padded with padstr&quot; do
+    &quot;hello&quot;.ljust(20, &#39;1234&#39;).should == &quot;hello123412341234123&quot;
+
+    &quot;&quot;.ljust(1, &quot;abcd&quot;).should == &quot;a&quot;
+    &quot;&quot;.ljust(2, &quot;abcd&quot;).should == &quot;ab&quot;
+    &quot;&quot;.ljust(3, &quot;abcd&quot;).should == &quot;abc&quot;
+    # ...
+  end
+  # ...</code></pre>
+<p>Replace &quot; do&quot; with &quot;, -&gt;&quot;, the &quot;.should ==&quot; with &quot;expect(...).toEqual &quot;. And add the boxing and unboxing methods.
+
+</p>
+<pre><code class="lang-coffeescript"># /path/to/rubyjs/spec/corelib/string/ljust_spec.coffee
+
+describe &quot;String#ljust with length, padding&quot;, -&gt;
+  it &quot;returns a new string of specified length with self left justified and padded with padstr&quot;, -&gt;
+    expect(R(&quot;hello&quot;).ljust(20, &#39;1234&#39;).unbox()).toEqual(&quot;hello123412341234123&quot;)
+
+    expect(R(&quot;&quot;).ljust(1, &quot;abcd&quot;).unbox()).toEqual(&quot;a&quot;)
+    expect(R(&quot;&quot;).ljust(2, &quot;abcd&quot;).unbox()).toEqual(&quot;ab&quot;)
+    expect(R(&quot;&quot;).ljust(3, &quot;abcd&quot;).unbox()).toEqual(&quot;abc&quot;)</code></pre>
+<h1>Development</h1>
+<pre><code># Generate documenation:
+npm install -g codo
+codo lib/</code></pre>
+
+      </div>
+    </div>
+    <div id='footer'>
+  Generated on
+  Thu Nov 22 2012 15:47:41 GMT+0700 (ICT)
+  by
+  <a href='https://github.com/netzpirat/codo' title='CoffeeScript API documentation generator'>Codo</a>
+  v0.9.1
+  (Node.js v0.8.4).
+  &#10034;
+  Press Ctrl-h to see the keyboard shortcuts
+  &#10034;
+  <a href='http://twitter.com/#!/netzpirat'>@netzpirat</a>
+  &#10034;
+  <a href='https://mksoft.ch'>mksoft.ch</a>
+</div>
+  </body>
+</html>
