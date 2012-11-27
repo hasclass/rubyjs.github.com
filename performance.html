@@ -1,0 +1,98 @@
+---
+layout: bounce
+title: RubyJS Performance
+---
+
+
+<div id="header">
+  <div class="container">
+    <div class="row">
+    <div class="span12">
+      <h1>RubyJS Performance</h1>
+    </div>
+  </div>
+  </div>
+</div>
+
+
+<div id="content">
+
+  <div class="container">
+
+    <div class="row">
+      <div class="span8">
+
+        <h2>Introduction</h2>
+        <p>
+          RubyJS is fast but does not compete on performance.
+        </p>
+
+        <p class="alert alert-error">
+          <strong>Benchmarks:</strong> when benchmarking methods against their counterparts in other libraries keep in mind that the methods have individual feature sets.
+        </p>
+
+        <h2>Fast parts</h2>
+
+        <h3>R( ) vs constructors</h3>
+        <p>
+          The R( ) typecasting method is optimized heavily for each possible native object or primitive.
+          <a href="http://jsperf.com/rubyjs-r-method">Benchmark for RubyJS R method</a>. To avoid the overhead of the R( ) method use the constructor directly: <code>new R.Array([1,2,3])</code>.
+        </p>
+
+        <h3>Typecasting method arguments</h3>
+        <p>
+          RubyJS methods accept primitives, objects, RubyJS and duck-typed objects.
+          However for performance reasons methods use primitives internally. The typecasting/boxing of arguments is lightweight in that it does not typecast arguments if we don't have to.
+          Passing primitives is the most performant option.
+        </p>
+
+{% highlight javascript %}
+flt = R(1.2345)
+flt.round(1) // recommended
+flt.round(new Number(1))
+flt.round(R(1))
+flt.round({to_int: -> R(1)})
+{% endhighlight %}
+
+        <h3>Iterators</h3>
+        <p>
+          Iterators like Array#each, #map, #inject, etc are fast by using for/while loops. Vastly outperforming ES5 style iterators. Following benchmarks compares iteration speed for <a href="http://jsperf.com/rubyjs-each-small">#each with small arrays</a> and <a href="http://jsperf.com/rubyjs-each-large">large arrays</a>. <b>Keep in mind that underscore/lodash _.each has additional functionality not covered by #each</b>.
+        </p>
+
+
+        <h2>The slow parts</h2>
+        <p>
+          RubyJS tries to be as close to Ruby as possible. However applying certain techniques will unfortunately be slow.
+        </p>
+
+        <h3>Math operations</h3>
+        <p>
+          Math operators for Numerics were added for completenes' sake. They typically don't make sense, as for every operation an extra object is created. Use natives wherever possible.
+        </p>
+
+{% highlight javascript %}
+num = R(1)
+num.plus(3).plus(5) // slow, 2 extra objects created
+num + 3 + 5         // faster
+{% endhighlight %}
+
+        <h3>Block arguments</h3>
+        <p>
+
+        </p>
+
+{% highlight javascript %}
+points = R([ [4,-3], [5, 2] ])
+points.each(function (a) {} )   // fast: a: [4, -3] | a: [5, 2]
+points.each(function (a,b) {} ) // slow: a: 4, b:-3 | a: 5, b: 2
+{% endhighlight %}
+
+        <h3>Sorting</h3>
+        <p>
+          In the alpha release sorting is particularly slow. Complying with Rubyspec requires to typecast elements of an array. Further optimization with sorting is on the way.
+        </p>
+
+      </div>
+    </div>
+  </div>
+</div>
