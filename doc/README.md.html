@@ -204,14 +204,53 @@ str                   //=&gt; &#39;Foo&#39;</code></pre>
 </ul>
 <p>Mathematic operations like +, -, * with RubyJS numerics is expensive as for every operation extra objects are created. It is suggested to use JavaScript native primitives for calculations, especially in loops.
 
+
 </p>
-<h2>Kernel</h2>
+<h2>Aliases</h2>
+<p>Where Ruby methods conflict with JavaScript naming the following aliases are used.
+You can also use the old names through property the brackets, e.g. <code>[&#39;==&#39;]</code>.
+
+</p>
+<pre><code>str.equals(&#39;foo&#39;)
+str[&#39;==&#39;](&#39;foo&#39;)
+
+# &#39;?&#39; is removed
+include    : include?
+
+# &#39;!&#39;&#39; =&gt; _bang
+upcase_bang: upcase!
+
+append     : &lt;&lt;
+equals     : ==
+equal_case : ===
+cmp        : &lt;=&gt;
+lt         : &lt;
+lteq       : &lt;=
+gt         : &gt;
+gteq       : &gt;=
+modulo     : %
+plus       : +
+minus      : -
+multiply   : *
+exp        : **
+divide     : /
+
+# Typecasting:
+
+R.$String(): String()
+R.$Float() : Float()
+
+# Special variables
+
+R[&#39;$~&#39;]    : $~
+R[&#39;$;&#39;]    : $;
+R[&#39;$,&#39;]    : $,</code></pre>
 
       </div>
     </div>
     <div id='footer'>
   Generated on
-  Tue Nov 27 2012 17:18:49 GMT+0700 (ICT)
+  Tue Nov 27 2012 22:25:50 GMT+0700 (ICT)
   by
   <a href='https://github.com/netzpirat/codo' title='CoffeeScript API documentation generator'>Codo</a>
   v0.9.1
