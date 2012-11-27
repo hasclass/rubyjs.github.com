@@ -111,7 +111,7 @@
       </table>
       <h2>Overview</h2>
       <div class='docstring'>
-  <p>EnumerableArray provides optimized Enumerable methods for Array </p> 
+  <p>Enumerables are slow through because of @each. using while loops is an order of magnitude faster. So all enum methods get a counterpart in array. </p> 
 </div>
 <div class='tags'>
 </div>
@@ -149,8 +149,8 @@
   </li>
   <li>
     <span class='signature'>
-      <a href='#apply_block-instance'>
-        - (void) <strong>apply_block</strong>(block, item)
+      <a href='#__apply_block__-instance'>
+        - (void) <strong>__apply_block__</strong>(block, item)
       </a>
     </span>
     <span class='desc'>
@@ -477,16 +477,6 @@
       
     </span>
   </li>
-  <li>
-    <span class='signature'>
-      <a href='#__single_arg__-instance'>
-        - (void) <strong>__single_arg__</strong>(args)
-      </a>
-    </span>
-    <span class='desc'>
-      
-    </span>
-  </li>
 </ul>
       <h2>Instance Method Details</h2>
       <div class='methods'>
@@ -512,8 +502,8 @@
 </div>
   </div>
   <div class='method_details'>
-    <p class='signature' id='apply_block-instance'>
-      - (void) <strong>apply_block</strong>(block, item)
+    <p class='signature' id='__apply_block__-instance'>
+      - (void) <strong>__apply_block__</strong>(block, item)
     </p>
     <div class='tags'>
 </div>
@@ -742,18 +732,11 @@
     <div class='tags'>
 </div>
   </div>
-  <div class='method_details'>
-    <p class='signature' id='__single_arg__-instance'>
-      - (void) <strong>__single_arg__</strong>(args)
-    </p>
-    <div class='tags'>
-</div>
-  </div>
 </div>
     </div>
     <div id='footer'>
   Generated on
-  Thu Nov 22 2012 15:47:41 GMT+0700 (ICT)
+  Tue Nov 27 2012 17:18:49 GMT+0700 (ICT)
   by
   <a href='https://github.com/netzpirat/codo' title='CoffeeScript API documentation generator'>Codo</a>
   v0.9.1

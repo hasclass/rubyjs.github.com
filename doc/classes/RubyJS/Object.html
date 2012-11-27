@@ -118,7 +118,7 @@
                 <a href='../../classes/RubyJS/MatchData.html'>RubyJS.MatchData</a>,
                 <a href='../../classes/RubyJS/Numeric.html'>RubyJS.Numeric</a>,
                 <a href='../../classes/RubyJS/Range.html'>RubyJS.Range</a>,
-                <a href='../../classes/RubyJS/RegExp.html'>RubyJS.RegExp</a>,
+                <a href='../../classes/RubyJS/Regexp.html'>RubyJS.Regexp</a>,
                 <a href='../../classes/RubyJS/String.html'>RubyJS.String</a>,
         <a href='../../classes/RubyJS/Time.html'>RubyJS.Time</a>
       </p>
@@ -132,6 +132,16 @@
     </span>
     <span class='desc'>
       
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#__add_default_aliases__-class'>
+        + (void) <strong>__add_default_aliases__</strong>(proto)
+      </a>
+    </span>
+    <span class='desc'>
+      Adds default aliases to symbol method names.
     </span>
   </li>
 </ul>
@@ -169,16 +179,6 @@
   </li>
   <li>
     <span class='signature'>
-      <a href='#to_lit-instance'>
-        - (void) <strong>to_lit</strong>()
-      </a>
-    </span>
-    <span class='desc'>
-      
-    </span>
-  </li>
-  <li>
-    <span class='signature'>
       <a href='#tap-instance'>
         - (void) <strong>tap</strong>(block)
       </a>
@@ -195,6 +195,16 @@
       + (void) <strong>include</strong>(mixin, replace = false)
     </p>
     <div class='tags'>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='__add_default_aliases__-class'>
+      + (void) <strong>__add_default_aliases__</strong>(proto)
+    </p>
+    <div class='docstring'>
+  <p>Adds default aliases to symbol method names. </p> <pre><code>&lt;&lt;  append ==  equals === equal_case &lt;=&gt; cmp %   modulo +   plus -   minus *   multiply **  exp /   divide class Foo extends RubyJS.Object    # ...    @__add_default_aliases__(@prototype)</code></pre> 
+</div>
+<div class='tags'>
 </div>
   </div>
 </div>
@@ -222,13 +232,6 @@
 </div>
   </div>
   <div class='method_details'>
-    <p class='signature' id='to_lit-instance'>
-      - (void) <strong>to_lit</strong>()
-    </p>
-    <div class='tags'>
-</div>
-  </div>
-  <div class='method_details'>
     <p class='signature' id='tap-instance'>
       - (void) <strong>tap</strong>(block)
     </p>
@@ -239,7 +242,7 @@
     </div>
     <div id='footer'>
   Generated on
-  Thu Nov 22 2012 15:47:41 GMT+0700 (ICT)
+  Tue Nov 27 2012 17:18:49 GMT+0700 (ICT)
   by
   <a href='https://github.com/netzpirat/codo' title='CoffeeScript API documentation generator'>Codo</a>
   v0.9.1

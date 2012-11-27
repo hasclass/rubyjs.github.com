@@ -115,32 +115,18 @@
           </td>
         </tr>
       </table>
+      <h2>Overview</h2>
+      <div class='docstring'>
+  <p>Methods in Base are added to <code>R</code>. </p> 
+</div>
+<div class='tags'>
+</div>
       <h2>Instance Method Summary</h2>
       <ul class='summary'>
   <li>
     <span class='signature'>
       <a href='#inspect-instance'>
         - (void) <strong>inspect</strong>(obj)
-      </a>
-    </span>
-    <span class='desc'>
-      
-    </span>
-  </li>
-  <li>
-    <span class='signature'>
-      <a href='#register_type_handlers-instance'>
-        - (void) <strong>register_type_handlers</strong>()
-      </a>
-    </span>
-    <span class='desc'>
-      Speeds up boxing.
-    </span>
-  </li>
-  <li>
-    <span class='signature'>
-      <a href='#deregister_type_handlers-instance'>
-        - (void) <strong>deregister_type_handlers</strong>()
       </a>
     </span>
     <span class='desc'>
@@ -171,6 +157,16 @@
     <span class='signature'>
       <a href='#falsey-instance'>
         - (void) <strong>falsey</strong>(obj)
+      </a>
+    </span>
+    <span class='desc'>
+      
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#truthy-instance'>
+        - (void) <strong>truthy</strong>(obj)
       </a>
     </span>
     <span class='desc'>
@@ -217,10 +213,10 @@
       </h3>
       <p class='inherited'>
                 <a href='../../classes/RubyJS/Object.html#include-class'>.include</a>,
+                <a href='../../classes/RubyJS/Object.html#__add_default_aliases__-class'>.__add_default_aliases__</a>,
                 <a href='../../classes/RubyJS/Object.html#send-instance'>#send</a>,
                 <a href='../../classes/RubyJS/Object.html#respond_to-instance'>#respond_to</a>,
                 <a href='../../classes/RubyJS/Object.html#to_enum-instance'>#to_enum</a>,
-                <a href='../../classes/RubyJS/Object.html#to_lit-instance'>#to_lit</a>,
         <a href='../../classes/RubyJS/Object.html#tap-instance'>#tap</a>
       </p>
       <h2>Instance Method Details</h2>
@@ -228,23 +224,6 @@
   <div class='method_details'>
     <p class='signature' id='inspect-instance'>
       - (void) <strong>inspect</strong>(obj)
-    </p>
-    <div class='tags'>
-</div>
-  </div>
-  <div class='method_details'>
-    <p class='signature' id='register_type_handlers-instance'>
-      - (void) <strong>register_type_handlers</strong>()
-    </p>
-    <div class='docstring'>
-  <p>Speeds up boxing. </p> 
-</div>
-<div class='tags'>
-</div>
-  </div>
-  <div class='method_details'>
-    <p class='signature' id='deregister_type_handlers-instance'>
-      - (void) <strong>deregister_type_handlers</strong>()
     </p>
     <div class='tags'>
 </div>
@@ -266,6 +245,13 @@
   <div class='method_details'>
     <p class='signature' id='falsey-instance'>
       - (void) <strong>falsey</strong>(obj)
+    </p>
+    <div class='tags'>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='truthy-instance'>
+      - (void) <strong>truthy</strong>(obj)
     </p>
     <div class='tags'>
 </div>
@@ -295,7 +281,7 @@
     </div>
     <div id='footer'>
   Generated on
-  Thu Nov 22 2012 15:47:41 GMT+0700 (ICT)
+  Tue Nov 27 2012 17:18:49 GMT+0700 (ICT)
   by
   <a href='https://github.com/netzpirat/codo' title='CoffeeScript API documentation generator'>Codo</a>
   v0.9.1
