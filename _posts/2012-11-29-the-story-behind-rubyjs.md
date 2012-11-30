@@ -1,1 +1,0 @@
-2012-11-29-the-story-behind-rubyjs.md
