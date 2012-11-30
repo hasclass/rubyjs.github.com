@@ -34,10 +34,17 @@ var str = R("hello world");
 alert(str.capitalize());
 </script>
 {% endhighlight %}
+
+        <h3>Try RubyJS in your browser</h3>
+        <p>
+          RubyJS is included on this page, so just open your JavaScript console.
+        </p>
+
         <h3>Dual-licensing</h3>
         <p>
           RubyJS is dual-licensed under the <a href="http://en.wikipedia.org/wiki/Affero_General_Public_License">AGPL</a> and a commercial license. Owners of a commercial license get access to the development repository that includes the unminified source code (in CoffeeScript).
         </p>
+
       </div>
     </div>
 
@@ -95,6 +102,32 @@ R([1,15,8]).size().odd()         // => true
 R("title").capitalize().to_native() // 'Title'
 // to_native(true) recursively unboxes array
 R([1,2,R(3)]).to_native(true)       // [1,2,3]
+
+{% endhighlight %}
+
+
+        <h3>Recursive chaining</h3>
+        <p>
+          By default the members of an Array are not typecasted. You can do so by passing true to R( ) or new R.Array().
+        </p>
+
+{% highlight javascript %}
+
+R([1]      ).get(0).odd()  // TypeError: Object 1 has no method 'odd'
+R([1], true).get(0).odd()  // true
+new R.Array([1,2], true)   // has the same effect
+
+{% endhighlight %}
+
+        <p>
+          to_native(true) typecasts recursively to native JS objects
+        </p>
+
+{% highlight javascript %}
+
+arr = R([1,2,3], true)
+arr.set(1, R(['foo'])
+arr.to_native(true)    // => [1,['foo'],3]
 
 {% endhighlight %}
 
@@ -196,6 +229,9 @@ new R.String('foo')
           <li>Bang methods: capitalize!() -> capitalize_bang()</li>
           <li>+, -, ** have aliases, or can be called directly str['+'](other)</li>
         </ul>
+        <p>
+          See the <a href="/doc/index.html">API documentation</a> for details.
+        </p>
       </div>
     </div>
 
