@@ -97,7 +97,7 @@ S(str).pad(50)
 With RubyJS: one API. One chain.
 
 {% highlight javascript %}
-R(arr, true).map(proc('capitalize'))
+R(arr, true).map(R.proc('capitalize'))
   .join(',')
   .center(50);
 // true for recursive wrapping/unwrapping
