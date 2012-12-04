@@ -30,25 +30,7 @@ _.chain([]).sortBy(fn).map(fn).value()
 R([]).sortBy(fn).map(fn).toNative()
 {% endhighlight %}
 
-RubyJS objects are lightweight wrappers around native objects.
-
-{% highlight javascript %}
-
-  RubyJS.Fixnum = function(__native__) {
-    this.__native__ = __native__;
-  }
-
-  RubyJS.Fixnum.prototype.odd = function () {
-    return this.__native__ % 2 == 0;
-  }
-
-  RubyJS.Fixnum.prototype.succ = function () {
-    return new RubyJS.Fixnum(this.__native__ + 1);
-  }
-
-{% endhighlight %}
-
-In most cases you don't even have to call toNative(). JavaScript coerces correctly out of the box:
+RubyJS objects are lightweight wrappers around native objects. You can easily get the wrapped natives back. In most cases you don't even have to call toNative(). JavaScript coerces correctly out of the box:
 
 {% highlight javascript %}
 
@@ -60,6 +42,35 @@ R(1.2345).round(2) + 1
 
 {% endhighlight %}
 
+Symbol#to_proc is a nice example of one of the pragmatic decisions RubyJS took. Symbols just dont make sense in JS, but writing [1.23,2.3].map(&:round) is just so convenient. RubyJS instead implements a `proc` method, that gives the same benefits, plus more.
+
+{% highlight javascript %}
+
+R([1.234, 3.232], true).map(R.proc('round'))  // => [1, 3]
+// Assign it to a global var for better looks:
+var proc = R.proc;
+// R.proc accepts arguments that are passed to the block:
+R([1.234, 3.232], true).map(proc('round', 2)) // => [1.23, 3.23]
+
+{% endhighlight %}
+
+
+### Iterators, Block and Functions
+
+A Ruby block, lambda, Proc maps to a JavaScript function. Hard-core rubyists scream in pain over this simplification. However in 99% of cases the small differences really don't matter. Block arguments work the same in RubyJS.
+
+{% highlight javascript %}
+
+R([1,2,3]).map(function (a) { return a * a} )
+// => [1,4,9]
+
+R([[1,-4], [3,4]]).map(function (a  ) {return a[0] * a[1];})
+R([[1,-4], [3,4]]).map(function (a,b) {return a * b;})
+// => [-4, 12]
+
+{% endhighlight %}
+
+Iterators are chainable through Enumerator objects. That might sound complicated but it's straightforward in your code.
 
 
 ### What is the advantage over using x,y,z?
@@ -90,7 +101,6 @@ R(arr, true).map(function (w) { return w.capitalize() })
 ### Lightweight, fast, works across browsers (and nodejs)
 
 Not just the file-size (20kb minzipped), but also the implementation using wrapper objects. Features that have little advantage but produce a lot of extra code or felt unnatural in JavaScript were skipped. There are numerous performance optimizations to make it fast, and all major browsers are supported.
-
 
 ### What about that price tag
 
