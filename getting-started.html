@@ -152,6 +152,19 @@ R(1).upto(5, function (i) { console.log(i) })
 
 {% endhighlight %}
 
+        <h3>Symbol to Proc</h3>
+        <p>
+          <code>R.proc(method_name)</code> provides the same functionality as Ruby Symbol#to_proc, just in a more JavaScript way of doing things. You can pass additional arguments to the method call.
+        </p>
+
+{% highlight javascript %}
+
+R.w('foo bar').map(function (w) { return w.capitalize() });
+R.w('foo bar').map(R.proc('capitalize'));
+R.w('foo bar').map(R.proc('ljust', 20));
+
+{% endhighlight %}
+
         <h3>Enumerator</h3>
         <p>
           Methods accepting a block return an Enumerator when not given a block to execute. Enumerator includes all the methods of the Enumerable mixin.
