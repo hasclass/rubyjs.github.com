@@ -71,5 +71,65 @@ title: RubyJS
     </div>
   </div>
 
+  <hr class="dashed">
+
+  <div class="row txt-lefty">
+    <div class="span8">
+      <h3>It's about the standard library, not writing Ruby in JS</h3>
+      <p>
+        The main motive is to have a decent standard library for JavaScript.
+        Instead of reinventing the wheel I took something that works already and people like, the Ruby core-lib.
+        RubyJS does not implement the class, object, metaprogramming features of Ruby.
+        The nice side-effect is that Rubyists get an immediate production boost.
+      </p>
+
+      <h3>How its different form underscore, stringjs, etc</h3>
+      <p>
+        RubyJS basically includes multiple libraries in one. There is one API, dependency, documentation and one way of doing things. Methods are chainable by design and chaining works across types.
+
+{% highlight javascript %}
+arr = ['foo', 'bar']
+str = _(arr).map(function (w) { return S(w).capitalize().s })
+            .join(',');
+S(str).pad(50)
+{% endhighlight %}
+
+With RubyJS: one API. One chain.
+
+{% highlight javascript %}
+R(arr, true).map(proc('capitalize'))
+  .join(',')
+  .center(50);
+// true for recursive wrapping/unwrapping
+{% endhighlight %}
+
+      </p>
+
+      <h3>It does it the JavaScript way</h3>
+      <p>
+        RubyJS is simply a library for standard types like String or Arrays that gives you many convenience methods.
+        There are features that are simply included for the completeness sake and to comply with Rubyspec.
+        And then there's also Ruby features that were not ported as they felt to unnatural.
+        <br>
+      </p>
+{% highlight javascript %}
+_.chain([]).sortBy(fn).map(fn).value()
+{% endhighlight %}
+      <p>
+        If the above is the JavaScript way, then so is the following:
+      </p>
+{% highlight javascript %}
+R([]).sortBy(fn).map(fn).toNative()
+{% endhighlight %}
+
+
+      <h3>Lightweight</h3>
+      <p>
+        RubyJS uses lightweight wrapper objects, much like other libraries. Method arguments are smartly typecasted and are only converted to RubyJS objects when really needed. The R function is heavily optimized and causes little overhead. Wrappers can also be significantly faster than extending native classes.
+      </p>
+
+
+    </div>
+  </div>
   </div>
 </div>
