@@ -86,9 +86,7 @@ R.w('fizz buzz').eachWithIndex().map(function(e,i) {
 
 // Breaking out of loops with breaker objects.
 R.catch_break(function (breaker) {
-  R([1,2,3]).each(function (i) {
-    if (i == 2) breaker.break(i);
-  })
+  R([1,2,3]).each(function (i) { if (i == 2) breaker.break(i); })
 })
 // => 2
 
