@@ -86,24 +86,24 @@ title: RubyJS
       <h3>How its different form underscore, stringjs, etc</h3>
       <p>
         RubyJS basically includes multiple libraries in one. There is one API, dependency, documentation and one way of doing things. Methods are chainable by design and chaining works across types.
-
+      </p>
 {% highlight javascript %}
 arr = ['foo', 'bar']
 str = _(arr).map(function (w) { return S(w).capitalize().s })
             .join(',');
-S(str).pad(50)
+S(str).pad(50).s
 {% endhighlight %}
-
-With RubyJS: one API. One chain.
-
+      <p>
+        With RubyJS: one API. One chain.
+      </p>
 {% highlight javascript %}
 R(arr, true).map(R.proc('capitalize'))
   .join(',')
-  .center(50);
-// true for recursive wrapping/unwrapping
+  .center(50)
+  .toNative();
+// In most cases calling toNative() is actually not necessary.
 {% endhighlight %}
 
-      </p>
 
       <h3>It does it the JavaScript way</h3>
       <p>
