@@ -130,12 +130,14 @@ R(arr, true).map(function (w) { return w.capitalize() })
 Not just the file-size (20kb minzipped), but also the implementation using wrapper objects. Features that have little advantage but produce a lot of extra code or felt unnatural in JavaScript were skipped. There are numerous performance optimizations to make it fast, and all major browsers are supported.
 
 
-### What about that price tag
+### <del>What about that price tag</del>
 
-It started out as a silly experiment and eventually became an obsession. There is a lot of grunt work involved, porting specs, code, docs. Yet still I'm passionate about working on RubyJS. Charging money for RubyJS would allow me to continue working on RubyJS full-time, and give me the incentive to also do the boring parts. Not many people can pull off that stunt. At least I want to give it a try.
+<del>It started out as a silly experiment and eventually became an obsession. There is a lot of grunt work involved, porting specs, code, docs. Yet still I'm passionate about working on RubyJS. Charging money for RubyJS would allow me to continue working on RubyJS full-time, and give me the incentive to also do the boring parts. Not many people can pull off that stunt. At least I want to give it a try.</del>
 
-So I decided to charge 190$ for a commercial license. It's alpha but it'll be beta soon, and you're getting upgrades for 1 year after the beta launch. Support is given on a best-effort basis.
+<del>So I decided to charge 190$ for a commercial license. It's alpha but it'll be beta soon, and you're getting upgrades for 1 year after the beta launch. Support is given on a best-effort basis.</del>
 
-How did I came up with 190$? On a recent small JS project I've spent at least half a day just for adding missing functionality to JS. I would have gotten my money back within the first week. How valuable is your time?
+<del>How did I came up with 190$? On a recent small JS project I've spent at least half a day just for adding missing functionality to JS. I would have gotten my money back within the first week. How valuable is your time?</del>
+
+After one week of intense talks I decided to make it free and MIT.
 
 Go check the [getting started guide](/gettings-started.html), or the [api docs](/doc/index.html). Try it in your Firebug/webdev console or get the files on [github.com/rubyjs/core-lib](http://github.com/rubyjs/core-lib).
