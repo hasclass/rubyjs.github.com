@@ -40,6 +40,32 @@ alert(str.capitalize());
           RubyJS is included on this page, so just open your JavaScript console.
         </p>
 
+        <h3>With Rails</h3>
+        <p>
+          There's a Rails <a href="https://github.com/rubyjs/rubyjs-rails" target="_blank">asset-pipeline gem for RubyJS</a>.
+        </p>
+{% highlight ruby %}
+# in Gemfile
+gem 'rubyjs-rails'
+# In your application.js manifest:
+//= require ruby
+{% endhighlight %}
+        </p>
+
+        <h3>NPM Module</h3>
+        <p>
+          RubyJS can be installed as an npm module.
+        </p>
+{% highlight bash %}
+$ npm install rubyjs
+{% endhighlight %}
+        <p>
+          Then simply require rubyjs which will add the R and RubyJS to the global object.
+        </p>
+{% highlight javascript %}
+require('rubyjs');
+R.puts("hello");
+{% endhighlight %}
       </div>
     </div>
 
